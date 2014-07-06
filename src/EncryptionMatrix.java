@@ -136,7 +136,7 @@ public class EncryptionMatrix {
     		for ( int x = 0; x < MATRIXDIM; x++ ) {
     			System.out.print( this.encryptionMatrix[x][y] );
     		}
-    		System.out.println("\n");
+    		System.out.print("\n");
     	}
 		return;
     }
