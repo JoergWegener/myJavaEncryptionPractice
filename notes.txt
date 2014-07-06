@@ -21,4 +21,4 @@ Todos:
 + Kommandozeilenoptionen einbauen.
 + Alle Texte auf Englisch!
 - Kommandozeilenversion testen.
-- Prüfungen auf Parameter in Kommandozeilenoption einbauen.
++ Prüfungen auf Parameter in Kommandozeilenoption einbauen.

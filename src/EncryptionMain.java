@@ -15,9 +15,14 @@ public class EncryptionMain {
 
 	public static void main(String[] args) {
 		
-        if ( args != null ) {
+        // Command line argument processing (if applicable)
+		if ( args != null ) {
         	if ( !processArgs( args ) )
-        		return;
+        		return; // Failure :(
+        } else {
+        	String outputText = convertString( passphrase, inputText, direction );
+        	printResultText( outputText );
+        	return; // Success!
         }
 		
 		boolean isPassphraseOK = false;
@@ -215,20 +220,43 @@ public class EncryptionMain {
         return true;
     }    
 
+	
+	// In called from the command line the first three arguments must be passphrase, direction and
+	// inputtext. If all is fine, we use this one.
+	// Return TRUE if successful, so we can decrypt and print the result.
 	private static boolean processArgs( String[] args ) {
 		if ( args.length != 3 ) {
 			// Wrong call
-			System.out.println( "Wrong call! Please call the program like that:" );
-			System.out.println( "java EncryptionMain <passphrase> <direction> <inputtext>" );
-			System.out.println( "where <direction> is D for decryption or E for encryption." );
-			System.out.println( "Also note that you have to use \" in case of text with spaces!" );
+			printCommandLineUserhelp();
 			return false;
 		}
 		
-		passphrase = getPassphrase( args[0] );
-		direction  = getDirection( args[1] );
+		if ( checkStringContent( args[ 0 ] ) && checkPassphrase( args[ 0 ] ) ) {
+			passphrase = getPassphrase( args[0] );
+		} else {
+			printCommandLineUserhelp();
+			return false;
+		}
+		if ( ( args[ 1 ].charAt( 0 ) == 'D' ) ||
+			 ( args[ 1 ].charAt( 0 ) == 'd' ) ||
+			 ( args[ 1 ].charAt( 0 ) == 'E' ) ||
+			 ( args[ 1 ].charAt( 0 ) == 'e' ) ) {
+			direction  = getDirection( args[1] );
+		} else {
+			printCommandLineUserhelp();
+			return false;
+		}
 		inputText  = getInputtext( args[2] );
 		return true;
+	}
+	
+	
+	// Standard user help for command line access.
+	private static void printCommandLineUserhelp( ) {
+		System.out.println( "Wrong call! Please call the program like that:" );
+		System.out.println( "java EncryptionMain <passphrase> <direction> <inputtext>" );
+		System.out.println( "where <direction> is D for decryption or E for encryption." );
+		System.out.println( "Also note that you have to use \" in case of text with spaces!" );
 	}
 
 }
