@@ -55,8 +55,6 @@ public class EncryptionMatrix {
 		// Determine their position
 		for ( int i = 0; i < inputText.length() / 2; i++ ) {
 			char c1, c2;      // Characters to be compared
-			//int x1, y1;       // Coordinates of the first character
-			//int x2, y2;       // Coordinates of the second character
 			
 			c1 = inputText.charAt( i * 2 );
 			c2 = inputText.charAt( ( i * 2 )+1 );
