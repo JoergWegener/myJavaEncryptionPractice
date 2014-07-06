@@ -180,8 +180,6 @@ public class EncryptionMain {
 	
 	// Encryption functionality
 	private static String convertString( String passphrase, String inputText, CryptoDirection direction ) {
-		// DEBUG
-        //myMatrix.printMatrix();
         if ( direction == CryptoDirection.ENCRYPT )
         	System.out.println( "Text to be encrypted:\n" + inputText + "\n" );
         else
@@ -196,8 +194,6 @@ public class EncryptionMain {
 	// Output. Note that this could be changed to provide the output in a GUI.
 	private static void printResultText( String outputText ) {
 		System.out.println( "Result Text:" );
-		//DEBUG System.out.println( outputText );
-		//DEBUG System.out.println( "And now in chunks of 5 chars:\n" );
 		
 		// Output in chunks of 5 characters separated by space; if not enough left, the rest will be printed.
 		while ( outputText.length() >= 5 ){
@@ -225,7 +221,7 @@ public class EncryptionMain {
     }    
 
 	
-	// In called from the command line the first three arguments must be passphrase, direction and
+	// If called from the command line the first three arguments must be passphrase, direction and
 	// inputtext. If all is fine, we use this one.
 	// Return TRUE if successful, so we can decrypt and print the result.
 	private static boolean processArgs( String[] args ) {
