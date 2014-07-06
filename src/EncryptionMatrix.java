@@ -82,7 +82,6 @@ public class EncryptionMatrix {
 	
 	// Helper method that returns a string of 2 chars for the clear chars provided.
 	// This result has to be added to the encrypted / decrypted string.
-	//private String createTargetCharPair ( int x1, int y1, int x2, int y2, CryptoDirection direction ) {
 	private String createTargetCharPair ( MatrixPoint point1, MatrixPoint point2, CryptoDirection direction ) {	
 		String result = "";
 		
