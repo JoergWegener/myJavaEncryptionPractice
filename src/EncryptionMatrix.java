@@ -51,7 +51,7 @@ public class EncryptionMatrix {
 
 	
     // This is the main method. Needs proper documentation.
-	public String encryptText( String clearText ) {
+	public String encryptText( String clearText, CryptoDirection direction ) {
 		
 		String cryptoText = ""; // This is the result
 		
@@ -72,18 +72,18 @@ public class EncryptionMatrix {
 		
 			// Now we have to look at the relative positions and 
 			// do the encryption.
-			cryptoText += this.createTargetCharPair( x1, y1, x2, y2, CryptoDirection.ENCRYPT );
+			cryptoText += this.createTargetCharPair( x1, y1, x2, y2, direction );
 		
 		}
 		
 		// If there is an uneven number of chars, the last one is moved
-		// down one square
+		// down / up one square
 		if ( ( clearText.length() % 2 ) == 1 ) {
 			char c;
 			int temp;
 			c = clearText.charAt( clearText.length() - 1 );
 			temp = this.findPosition( c );
-			cryptoText += this.encryptionMatrix[ temp / 10 ][ ( ( temp % 10 )+1 ) % MATRIXDIM ];
+			cryptoText += this.encryptionMatrix[ temp / 10 ][ ( ( temp % 10 ) + direction.dirInd + MATRIXDIM ) % MATRIXDIM ];
 		}
 		
     	return cryptoText;
@@ -91,7 +91,7 @@ public class EncryptionMatrix {
 	
 	
 	// Helper method that returns a string of 2 chars for the clear chars provided.
-	// This result has to be added to the encrypted string.
+	// This result has to be added to the encrypted / decrypted string.
 	private String createTargetCharPair ( int x1, int y1, int x2, int y2, CryptoDirection direction ) {
 		String result = "";
 		

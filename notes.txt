@@ -16,5 +16,7 @@ Todos:
 
 - Refactoring: checks raus aus Main, rein in die Matrixklasse.
 - Unittests (VOR dem Refactoring; Problem: wie teste ich main()?)
-- main() komplett umbauen, damit man ver- und entschlüsseln kann.
-- Enum für die Richtung.
++ main() komplett umbauen, damit man ver- und entschlüsseln kann.
++ Enum für die Richtung.
+- Kommandozeilenoptionen einbauen.
++ Alle Texte auf Englisch!
