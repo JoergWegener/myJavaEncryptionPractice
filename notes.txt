@@ -18,5 +18,7 @@ Todos:
 - Unittests (VOR dem Refactoring; Problem: wie teste ich main()?)
 + main() komplett umbauen, damit man ver- und entschlüsseln kann.
 + Enum für die Richtung.
-- Kommandozeilenoptionen einbauen.
++ Kommandozeilenoptionen einbauen.
 + Alle Texte auf Englisch!
+- Kommandozeilenversion testen.
+- Prüfungen auf Parameter in Kommandozeilenoption einbauen.

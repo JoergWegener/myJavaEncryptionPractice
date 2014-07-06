@@ -5,10 +5,20 @@ import java.io.InputStreamReader;
 
 
 public class EncryptionMain {
+	
+	// Stuff that can either be read from the console or the command line
+	// (or derived, in the case of the direction) is stored here, so that
+	// it can be set in different methods.
+	private static String          passphrase = null;	
+	private static String          inputText  = null;
+	private static CryptoDirection direction  = null;
 
 	public static void main(String[] args) {
 		
-		String passphrase  = null;
+        if ( args != null ) {
+        	if ( !processArgs( args ) )
+        		return;
+        }
 		
 		boolean isPassphraseOK = false;
 		
@@ -20,9 +30,9 @@ public class EncryptionMain {
 			isPassphraseOK = checkPassphrase( passphrase );	
 		} while ( !isPassphraseOK );
 				
-		String inputText = getInputtext( "" );
+		inputText = getInputtext( "" );
 		
-		CryptoDirection direction = getDirection( "" );
+		direction = getDirection( "" );
 		
 		String outputText = convertString( passphrase, inputText, direction );
 		
@@ -204,5 +214,21 @@ public class EncryptionMain {
         }
         return true;
     }    
+
+	private static boolean processArgs( String[] args ) {
+		if ( args.length != 3 ) {
+			// Wrong call
+			System.out.println( "Wrong call! Please call the program like that:" );
+			System.out.println( "java EncryptionMain <passphrase> <direction> <inputtext>" );
+			System.out.println( "where <direction> is D for decryption or E for encryption." );
+			System.out.println( "Also note that you have to use \" in case of text with spaces!" );
+			return false;
+		}
+		
+		passphrase = getPassphrase( args[0] );
+		direction  = getDirection( args[1] );
+		inputText  = getInputtext( args[2] );
+		return true;
+	}
 
 }
