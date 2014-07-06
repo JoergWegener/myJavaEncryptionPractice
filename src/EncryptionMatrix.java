@@ -8,7 +8,7 @@ public class EncryptionMatrix {
 	// The encryption matrix is a 6x6 matrix. It contains all characters
 	// and the numbers 0..9. SPACE is not needed, because it will always
 	// be ignored. 
-	private char [][] encryptionMatrix = new char [MATRIXDIM][MATRIXDIM];
+	private char [][] encryptionMatrix = new char [ MATRIXDIM ][ MATRIXDIM ];
 	
 	// Constructor
 	public EncryptionMatrix( String passphrase ) {
@@ -55,20 +55,17 @@ public class EncryptionMatrix {
 		// Determine their position
 		for ( int i = 0; i < inputText.length() / 2; i++ ) {
 			char c1, c2;      // Characters to be compared
-			int x1, y1;       // Coordinates of the first character
-			int x2, y2;       // Coordinates of the second character
-			//int temp1, temp2; // temps for the determination of the coordinates
+			//int x1, y1;       // Coordinates of the first character
+			//int x2, y2;       // Coordinates of the second character
 			
 			c1 = inputText.charAt( i * 2 );
 			c2 = inputText.charAt( ( i * 2 )+1 );
 			MatrixPoint point1 = this.findPosition( c1 );
 			MatrixPoint point2 = this.findPosition( c2 );
-			x1 = point1.getX(); y1 = point1.getY();
-			x2 = point2.getX(); y2 = point2.getY();
 		
 			// Now we have to look at the relative positions and 
 			// do the encryption.
-			outputText += this.createTargetCharPair( x1, y1, x2, y2, direction );
+			outputText += this.createTargetCharPair( point1.getX(), point1.getY(), point2.getX(), point2.getY(), direction );
 		
 		}
 		
@@ -116,8 +113,7 @@ public class EncryptionMatrix {
 	
 	
 	
-	// Helper method. The tens determine the X position, the Ones the Y position
-	// (How I HATE it that Java does not have structs, or export parameters!)
+	// Helper method determines the MatrixPoint of a char.
 	private MatrixPoint findPosition ( char c ) {
 		MatrixPoint result = null;
 		mainloop: 

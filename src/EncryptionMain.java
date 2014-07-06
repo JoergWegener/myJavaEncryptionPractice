@@ -151,7 +151,6 @@ public class EncryptionMain {
 		// Convert to upper case and remove spaces
 		s = s.toUpperCase();
 		s = s.replaceAll(" ","");
-		//s.replaceAll("\\s", "" );
 		
 		// Now convert the rest of the umlauts
 		s = s.replaceAll( "Ä", "AE" );
