@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 
+
 public class EncryptionMain {
 	
 	// Stuff that can either be read from the console or the command line
@@ -13,31 +14,31 @@ public class EncryptionMain {
 	private static String          inputText  = null;
 	private static CryptoDirection direction  = null;
 
-	public static void main(String[] args) {
+	public static void main( String[] args ) {
 		
         // Command line argument processing (if applicable)
 		if ( args != null ) {
-        	if ( !processArgs( args ) )
-        		return; // Failure :(
-        } else {
-        	String outputText = convertString( passphrase, inputText, direction );
-        	printResultText( outputText );
-        	return; // Success!
-        }
-		
-		boolean isPassphraseOK = false;
-		
-		
-		// Main process: read a clear text, encrypt it, return it.
-		
-		do {
-			passphrase = getPassphrase( "" );
-			isPassphraseOK = checkPassphrase( passphrase );	
-		} while ( !isPassphraseOK );
-				
-		inputText = getInputtext( "" );
-		
-		direction = getDirection( "" );
+			if ( !processArgs( args ) ) {
+				return; // Failure :(
+			}
+		} else {
+			// No command line => interactive.
+
+			boolean isPassphraseOK = false;
+
+
+			// Main process: read a clear text, encrypt it, return it.
+
+			do {
+				passphrase = getPassphrase( "" );
+				isPassphraseOK = checkPassphrase( passphrase );	
+			} while ( !isPassphraseOK );
+
+			inputText = getInputtext( "" );
+
+			direction = getDirection( "" );
+
+		}
 		
 		String outputText = convertString( passphrase, inputText, direction );
 		
@@ -184,8 +185,8 @@ public class EncryptionMain {
         EncryptionMatrix myMatrix = new EncryptionMatrix( passphrase );
 		
 		// DEBUG
-        myMatrix.printMatrix();
-        System.out.println( "Text to be encrypted:\n" + clearText );
+        //myMatrix.printMatrix();
+        System.out.println( "Text to be encrypted:\n" + clearText + "\n" );
 
 		return myMatrix.encryptText( clearText, direction );
 	}
@@ -193,9 +194,9 @@ public class EncryptionMain {
 	
 	// Output. Note that this could be changed to provide the output in a GUI.
 	private static void printResultText( String cryptotext ) {
-		System.out.println( "Result Text:\n" );
-		System.out.println( cryptotext );
-		System.out.println( "And now in chunks of 5 chars:\n" );
+		System.out.println( "Result Text:" );
+		//DEBUG System.out.println( cryptotext );
+		//DEBUG System.out.println( "And now in chunks of 5 chars:\n" );
 		while ( cryptotext.length() >= 5 ){
 			System.out.print( cryptotext.substring( 0, 5 ) + " ");
 			cryptotext = cryptotext.substring( 5 );

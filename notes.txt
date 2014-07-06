@@ -20,5 +20,5 @@ Todos:
 + Enum für die Richtung.
 + Kommandozeilenoptionen einbauen.
 + Alle Texte auf Englisch!
-- Kommandozeilenversion testen.
++ Kommandozeilenversion testen.
 + Prüfungen auf Parameter in Kommandozeilenoption einbauen.
