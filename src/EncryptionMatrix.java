@@ -42,8 +42,8 @@ public class EncryptionMatrix {
 	    // the passphrase
 	    int count = passphrase.length();
 	    for ( char c : charsForMatrixInsertion.toCharArray() ) {
-	    	int x = count / MATRIXDIM;
-	    	int y = count % MATRIXDIM;
+	    	int x = count % MATRIXDIM;
+	    	int y = count / MATRIXDIM;
 	    	this.encryptionMatrix[x][y] = c;
 	    	count++;
 	    }

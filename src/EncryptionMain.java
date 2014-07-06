@@ -58,7 +58,7 @@ public class EncryptionMain {
 
 		// Remove spaces and convert to upper case
 		s = s.toUpperCase();
-		s.replaceAll( " ", "" );
+		s = s.replaceAll( " ", "" );
 		
 		return s;
 	}
@@ -88,16 +88,17 @@ public class EncryptionMain {
 		} while ( !isStringOk );
 		
 		// Replace ß before conversion (otherwise it will not work)
-		s.replaceAll( "ß", "SS" );
+		s = s.replaceAll( "ß", "SS" );
 		
 		// Convert to upper case and remove spaces
 		s = s.toUpperCase();
-		s.replaceAll( " ", "" );
+		s = s.replaceAll(" ","");
+		//s.replaceAll("\\s", "" );
 		
 		// Now convert the rest of the umlauts
-		s.replaceAll( "Ä", "AE" );
-		s.replaceAll( "Ö", "OE" );
-		s.replaceAll( "Ü", "UE" );
+		s = s.replaceAll( "Ä", "AE" );
+		s = s.replaceAll( "Ö", "OE" );
+		s = s.replaceAll( "Ü", "UE" );
 		
 		return s;
 	}
@@ -126,6 +127,7 @@ public class EncryptionMain {
 		
 		// DEBUG
         myMatrix.printMatrix();
+        System.out.println( "Text to be encrypted:\n" + clearText );
 
 		return myMatrix.encryptText( clearText );
 	}
