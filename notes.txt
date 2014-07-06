@@ -1,0 +1,7 @@
+Notizen zu diesem Projekt
+=========================
+
+Verschlüsselung funktioniert nicht richtig. Schuldig ist
+EncryptionMatrix.encryptText. Die Reihenfolge der 2 Zeichen im Fall X
+und Y unterschiedlich ist vertauscht; das zweite Zeichen kommt vor dem
+ersten. Hier hilft nur noch der Debugger
