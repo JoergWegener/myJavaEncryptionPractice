@@ -72,7 +72,7 @@ public class EncryptionMatrix {
 		
 			// Now we have to look at the relative positions and 
 			// do the encryption.
-			cryptoText += this.encryptCharPair( x1, y1, x2, y2 );
+			cryptoText += this.createTargetCharPair( x1, y1, x2, y2, CryptoDirection.ENCRYPT );
 		
 		}
 		
@@ -92,7 +92,7 @@ public class EncryptionMatrix {
 	
 	// Helper method that returns a string of 2 chars for the clear chars provided.
 	// This result has to be added to the encrypted string.
-	private String encryptCharPair ( int x1, int y1, int x2, int y2 ) {
+	private String createTargetCharPair ( int x1, int y1, int x2, int y2, CryptoDirection direction ) {
 		String result = "";
 		
 		// Determine the relative position of the 2 characters
@@ -101,17 +101,17 @@ public class EncryptionMatrix {
 			result += this.encryptionMatrix[ x2 ][ y1 ]; // Move c1 horizontally
 			result += this.encryptionMatrix[ x1 ][ y2 ]; // Move c2 horizontally
 		} else if ( ( x1 == x2 ) && ( y1 != y2) ) { 
-			// On the same X axis. Move both chars down one space; roll over if needed
-			result += this.encryptionMatrix[ x1 ][ (y1 + 1) % MATRIXDIM ];
-			result += this.encryptionMatrix[ x2 ][ (y2 + 1) % MATRIXDIM ];
+			// On the same X axis. Move both chars down / up one space; roll over if needed
+			result += this.encryptionMatrix[ x1 ][ (y1 + direction.dirInd + MATRIXDIM) % MATRIXDIM ];
+			result += this.encryptionMatrix[ x2 ][ (y2 + direction.dirInd + MATRIXDIM) % MATRIXDIM ];
 		} else if ( (x1 != x2 ) && ( y1 == y2 ) ) {
-			// On the same Y axis. Move right one space; roll over if needed
-			result += this.encryptionMatrix[ (x1 + 1) % MATRIXDIM ][ y1 ];
-			result += this.encryptionMatrix[ (x2 + 1) % MATRIXDIM ][ y2 ];
+			// On the same Y axis. Move right / left one space; roll over if needed
+			result += this.encryptionMatrix[ (x1 + direction.dirInd + MATRIXDIM) % MATRIXDIM ][ y1 ];
+			result += this.encryptionMatrix[ (x2 + direction.dirInd + MATRIXDIM) % MATRIXDIM ][ y2 ];
 		} else if ( ( x1 == x2 ) && ( y1 == y2 ) ) {
-			// Identical characters: move both one space down, roll over if needed
-			result += this.encryptionMatrix[ x1 ][ (y1 + 1) % MATRIXDIM ];
-			result += this.encryptionMatrix[ x2 ][ (y2 + 1) % MATRIXDIM ];
+			// Identical characters: move both one space down / up, roll over if needed
+			result += this.encryptionMatrix[ x1 ][ (y1 + direction.dirInd + MATRIXDIM) % MATRIXDIM ];
+			result += this.encryptionMatrix[ x2 ][ (y2 + direction.dirInd + MATRIXDIM) % MATRIXDIM ];
 		} else {
 			// SHIT this is not supposed to happen!
 			System.out.println( "Clusterfuck; this coding should be completely unreachable!\n" );
