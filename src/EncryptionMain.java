@@ -40,9 +40,8 @@ public class EncryptionMain {
 
 		}
 		
-		String outputText = convertString( passphrase, inputText, direction );
-		
-		printResultText( outputText );
+		// Conversion (encryption or decryption) and printout in one step
+		printResultText( convertString( passphrase, inputText, direction ) );
 
 	}
 	
@@ -181,14 +180,17 @@ public class EncryptionMain {
 	
 	
 	// Encryption functionality
-	private static String convertString( String passphrase, String clearText, CryptoDirection direction ) {
+	private static String convertString( String passphrase, String inputText, CryptoDirection direction ) {
         EncryptionMatrix myMatrix = new EncryptionMatrix( passphrase );
 		
 		// DEBUG
         //myMatrix.printMatrix();
-        System.out.println( "Text to be encrypted:\n" + clearText + "\n" );
+        if ( direction == CryptoDirection.ENCRYPT )
+        	System.out.println( "Text to be encrypted:\n" + inputText + "\n" );
+        else
+        	System.out.println( "Text to be decrypted:\n" + inputText + "\n" );
 
-		return myMatrix.encryptText( clearText, direction );
+		return myMatrix.encryptText( inputText, direction );
 	}
 	
 	
