@@ -2,7 +2,7 @@
 public class EncryptionMatrix {
 	
 	
-	private final int MATRIXDIM = 6; // I hate magic numbers, always use constants
+	private final short MATRIXDIM = 6; // I hate magic numbers, always use constants
 	
 	
 	// The encryption matrix is a 6x6 matrix. It contains all characters
@@ -20,11 +20,10 @@ public class EncryptionMatrix {
 	    	// Determine the coordinates for the character in the 
 	    	// matrix: X is "count MOD 6" (width of the matrix),
 	    	// Y is "count DIV 6" (depth of the matrix).
-	    	int x = count % MATRIXDIM;
-	    	int y = count / MATRIXDIM;
+	    	MatrixPoint myPoint = new MatrixPoint( count, MATRIXDIM );
 	    	
 	    	// Now we know the square, and we fill it
-	    	this.encryptionMatrix[ x ][ y ] = passphrase.charAt( count );
+	    	this.encryptionMatrix[ myPoint.getX() ][ myPoint.getY() ] = passphrase.charAt( count );
 	    	
 	    	// The character is already used, so we remove it from the string that
 	    	// contains the still-to-be-inserted characters:
@@ -40,9 +39,8 @@ public class EncryptionMatrix {
 	    // the passphrase
 	    int count = passphrase.length(); // That number of characters has already been inserted above
 	    for ( char c : charsForMatrixInsertion.toCharArray() ) {
-	    	int x = count % MATRIXDIM;
-	    	int y = count / MATRIXDIM;
-	    	this.encryptionMatrix[ x ][ y ] = c;
+	    	MatrixPoint myPoint = new MatrixPoint( count, MATRIXDIM );
+	    	this.encryptionMatrix[ myPoint.getX() ][ myPoint.getY() ] = c;
 	    	count++;
 	    }
 	}
@@ -59,14 +57,14 @@ public class EncryptionMatrix {
 			char c1, c2;      // Characters to be compared
 			int x1, y1;       // Coordinates of the first character
 			int x2, y2;       // Coordinates of the second character
-			int temp1, temp2; // temps for the determination of the coordinates
+			//int temp1, temp2; // temps for the determination of the coordinates
 			
 			c1 = inputText.charAt( i * 2 );
 			c2 = inputText.charAt( ( i * 2 )+1 );
-			temp1 = this.findPosition( c1 );
-			temp2 = this.findPosition( c2 );
-			x1 = temp1 / 10; y1 = temp1 % 10;
-			x2 = temp2 / 10; y2 = temp2 % 10;
+			MatrixPoint point1 = this.findPosition( c1 );
+			MatrixPoint point2 = this.findPosition( c2 );
+			x1 = point1.getX(); y1 = point1.getY();
+			x2 = point2.getX(); y2 = point2.getY();
 		
 			// Now we have to look at the relative positions and 
 			// do the encryption.
@@ -78,10 +76,9 @@ public class EncryptionMatrix {
 		// down / up one square
 		if ( ( inputText.length() % 2 ) == 1 ) {
 			char c;
-			int temp;
 			c = inputText.charAt( inputText.length() - 1 );
-			temp = this.findPosition( c );
-			outputText += this.encryptionMatrix[ temp / 10 ][ ( ( temp % 10 ) + direction.dirInd + MATRIXDIM ) % MATRIXDIM ];
+			MatrixPoint point = this.findPosition( c );
+			outputText += this.encryptionMatrix[ point.getX() ][ ( point.getY() + direction.dirInd + MATRIXDIM ) % MATRIXDIM ];
 		}
 		
     	return outputText;
@@ -121,13 +118,13 @@ public class EncryptionMatrix {
 	
 	// Helper method. The tens determine the X position, the Ones the Y position
 	// (How I HATE it that Java does not have structs, or export parameters!)
-	private int findPosition ( char c ) {
-		int result = 0;
+	private MatrixPoint findPosition ( char c ) {
+		MatrixPoint result = null;
 		mainloop: 
 		for ( int y = 0; y < MATRIXDIM; y++ )
 			for ( int x = 0; x < MATRIXDIM; x++ )
 				if ( this.encryptionMatrix[x][y] == c ) {
-					result = ( 10*x ) + y;
+					result = new MatrixPoint( x, y );
 					break mainloop; // Only one hit possible, so we can leave the loop
 				}
 		return result;
