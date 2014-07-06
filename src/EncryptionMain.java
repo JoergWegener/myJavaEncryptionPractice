@@ -190,7 +190,7 @@ public class EncryptionMain {
         else
         	System.out.println( "Text to be decrypted:\n" + inputText + "\n" );
 
-		return myMatrix.encryptText( inputText, direction );
+		return myMatrix.convertText( inputText, direction );
 	}
 	
 	

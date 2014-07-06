@@ -7,9 +7,7 @@ public class EncryptionMatrix {
 	
 	// The encryption matrix is a 6x6 matrix. It contains all characters
 	// and the numbers 0..9. SPACE is not needed, because it will always
-	// be translated into SPACE. Yes, this is a weakness, but hey, this
-	// encryption algorithm is not designed to withstand the NSA. It is
-	// meant for me to practice my Java, nothing more, nothing less.
+	// be ignored. 
 	private char [][] encryptionMatrix = new char [MATRIXDIM][MATRIXDIM];
 	
 	// Constructor
@@ -26,7 +24,7 @@ public class EncryptionMatrix {
 	    	int y = count / MATRIXDIM;
 	    	
 	    	// Now we know the square, and we fill it
-	    	this.encryptionMatrix[x][y] = passphrase.charAt(count);
+	    	this.encryptionMatrix[ x ][ y ] = passphrase.charAt( count );
 	    	
 	    	// The character is already used, so we remove it from the string that
 	    	// contains the still-to-be-inserted characters:
@@ -40,31 +38,31 @@ public class EncryptionMatrix {
 	    
 	    // Now we add all the characters and numbers that were NOT part of 
 	    // the passphrase
-	    int count = passphrase.length();
+	    int count = passphrase.length(); // That number of characters has already been inserted above
 	    for ( char c : charsForMatrixInsertion.toCharArray() ) {
 	    	int x = count % MATRIXDIM;
 	    	int y = count / MATRIXDIM;
-	    	this.encryptionMatrix[x][y] = c;
+	    	this.encryptionMatrix[ x ][ y ] = c;
 	    	count++;
 	    }
 	}
 
 	
     // This is the main method. Needs proper documentation.
-	public String encryptText( String clearText, CryptoDirection direction ) {
+	public String convertText( String inputText, CryptoDirection direction ) {
 		
-		String cryptoText = ""; // This is the result
+		String outputText = ""; // This is the result
 		
 		// Loop over the input string. Build pairs of characters.
 		// Determine their position
-		for ( int i = 0; i < clearText.length() / 2; i++ ) {
+		for ( int i = 0; i < inputText.length() / 2; i++ ) {
 			char c1, c2;      // Characters to be compared
 			int x1, y1;       // Coordinates of the first character
 			int x2, y2;       // Coordinates of the second character
 			int temp1, temp2; // temps for the determination of the coordinates
 			
-			c1 = clearText.charAt( i * 2 );
-			c2 = clearText.charAt( ( i * 2 )+1 );
+			c1 = inputText.charAt( i * 2 );
+			c2 = inputText.charAt( ( i * 2 )+1 );
 			temp1 = this.findPosition( c1 );
 			temp2 = this.findPosition( c2 );
 			x1 = temp1 / 10; y1 = temp1 % 10;
@@ -72,21 +70,21 @@ public class EncryptionMatrix {
 		
 			// Now we have to look at the relative positions and 
 			// do the encryption.
-			cryptoText += this.createTargetCharPair( x1, y1, x2, y2, direction );
+			outputText += this.createTargetCharPair( x1, y1, x2, y2, direction );
 		
 		}
 		
 		// If there is an uneven number of chars, the last one is moved
 		// down / up one square
-		if ( ( clearText.length() % 2 ) == 1 ) {
+		if ( ( inputText.length() % 2 ) == 1 ) {
 			char c;
 			int temp;
-			c = clearText.charAt( clearText.length() - 1 );
+			c = inputText.charAt( inputText.length() - 1 );
 			temp = this.findPosition( c );
-			cryptoText += this.encryptionMatrix[ temp / 10 ][ ( ( temp % 10 ) + direction.dirInd + MATRIXDIM ) % MATRIXDIM ];
+			outputText += this.encryptionMatrix[ temp / 10 ][ ( ( temp % 10 ) + direction.dirInd + MATRIXDIM ) % MATRIXDIM ];
 		}
 		
-    	return cryptoText;
+    	return outputText;
     }
 	
 	
