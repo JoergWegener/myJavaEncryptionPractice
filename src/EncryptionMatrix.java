@@ -63,7 +63,7 @@ public class EncryptionMatrix {
 		
 			// Now we have to look at the relative positions and 
 			// do the encryption.
-			outputText += this.createTargetCharPair( point1.getX(), point1.getY(), point2.getX(), point2.getY(), direction );
+			outputText += this.createTargetCharPair( point1, point2, direction );
 		
 		}
 		
@@ -82,26 +82,27 @@ public class EncryptionMatrix {
 	
 	// Helper method that returns a string of 2 chars for the clear chars provided.
 	// This result has to be added to the encrypted / decrypted string.
-	private String createTargetCharPair ( int x1, int y1, int x2, int y2, CryptoDirection direction ) {
+	//private String createTargetCharPair ( int x1, int y1, int x2, int y2, CryptoDirection direction ) {
+	private String createTargetCharPair ( MatrixPoint point1, MatrixPoint point2, CryptoDirection direction ) {	
 		String result = "";
 		
 		// Determine the relative position of the 2 characters
-		if ( ( x1 != x2 ) && ( y1 != y2 ) ) {
+		if ( ( point1.getX() != point2.getX() ) && ( point1.getY() != point2.getY() ) ) {
 			// Both axes are different. Swap horizontally
-			result += this.encryptionMatrix[ x2 ][ y1 ]; // Move c1 horizontally
-			result += this.encryptionMatrix[ x1 ][ y2 ]; // Move c2 horizontally
-		} else if ( ( x1 == x2 ) && ( y1 != y2) ) { 
+			result += this.encryptionMatrix[ point2.getX() ][ point1.getY() ]; // Move c1 horizontally
+			result += this.encryptionMatrix[ point1.getX() ][ point2.getY() ]; // Move c2 horizontally
+		} else if ( ( point1.getX() == point2.getX() ) && ( point1.getY() != point2.getY() ) ) { 
 			// On the same X axis. Move both chars down / up one space; roll over if needed
-			result += this.encryptionMatrix[ x1 ][ (y1 + direction.dirInd + MATRIXDIM) % MATRIXDIM ];
-			result += this.encryptionMatrix[ x2 ][ (y2 + direction.dirInd + MATRIXDIM) % MATRIXDIM ];
-		} else if ( (x1 != x2 ) && ( y1 == y2 ) ) {
+			result += this.encryptionMatrix[ point1.getX() ][ ( point1.getY() + direction.dirInd + MATRIXDIM ) % MATRIXDIM ];
+			result += this.encryptionMatrix[ point2.getX() ][ ( point2.getY() + direction.dirInd + MATRIXDIM ) % MATRIXDIM ];
+		} else if ( ( point1.getX() != point2.getX() ) && ( point1.getY() == point2.getY() ) ) {
 			// On the same Y axis. Move right / left one space; roll over if needed
-			result += this.encryptionMatrix[ (x1 + direction.dirInd + MATRIXDIM) % MATRIXDIM ][ y1 ];
-			result += this.encryptionMatrix[ (x2 + direction.dirInd + MATRIXDIM) % MATRIXDIM ][ y2 ];
-		} else if ( ( x1 == x2 ) && ( y1 == y2 ) ) {
+			result += this.encryptionMatrix[ ( point1.getX() + direction.dirInd + MATRIXDIM) % MATRIXDIM ][ point1.getY() ];
+			result += this.encryptionMatrix[ ( point2.getX() + direction.dirInd + MATRIXDIM) % MATRIXDIM ][ point2.getY() ];
+		} else if ( ( point1.getX() == point2.getX() ) && ( point1.getY() == point2.getY() ) ) {
 			// Identical characters: move both one space down / up, roll over if needed
-			result += this.encryptionMatrix[ x1 ][ (y1 + direction.dirInd + MATRIXDIM) % MATRIXDIM ];
-			result += this.encryptionMatrix[ x2 ][ (y2 + direction.dirInd + MATRIXDIM) % MATRIXDIM ];
+			result += this.encryptionMatrix[ point1.getX() ][ ( point1.getY() + direction.dirInd + MATRIXDIM) % MATRIXDIM ];
+			result += this.encryptionMatrix[ point2.getX() ][ ( point2.getY() + direction.dirInd + MATRIXDIM) % MATRIXDIM ];
 		} else {
 			// SHIT this is not supposed to happen!
 			System.out.println( "Clusterfuck; this coding should be completely unreachable!\n" );
