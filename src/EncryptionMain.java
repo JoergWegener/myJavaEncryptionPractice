@@ -141,9 +141,9 @@ public class EncryptionMain {
 
 			} while ( !isStringOk );
 
-		} 
-		else 
+		} else {
 			s = commandlineText;
+		}
 		
 		// Replace ß before conversion (otherwise it will not work)
 		s = s.replaceAll( "ß", "SS" );
@@ -181,8 +181,6 @@ public class EncryptionMain {
 	
 	// Encryption functionality
 	private static String convertString( String passphrase, String inputText, CryptoDirection direction ) {
-        EncryptionMatrix myMatrix = new EncryptionMatrix( passphrase );
-		
 		// DEBUG
         //myMatrix.printMatrix();
         if ( direction == CryptoDirection.ENCRYPT )
@@ -190,20 +188,24 @@ public class EncryptionMain {
         else
         	System.out.println( "Text to be decrypted:\n" + inputText + "\n" );
 
-		return myMatrix.convertText( inputText, direction );
+        // Elegant Java: create the matrix, convert the input, catch the output and return
+        // in one single go. #iLike
+        return new EncryptionMatrix( passphrase ).convertText( inputText, direction );
 	}
 	
 	
 	// Output. Note that this could be changed to provide the output in a GUI.
-	private static void printResultText( String cryptotext ) {
+	private static void printResultText( String outputText ) {
 		System.out.println( "Result Text:" );
-		//DEBUG System.out.println( cryptotext );
+		//DEBUG System.out.println( outputText );
 		//DEBUG System.out.println( "And now in chunks of 5 chars:\n" );
-		while ( cryptotext.length() >= 5 ){
-			System.out.print( cryptotext.substring( 0, 5 ) + " ");
-			cryptotext = cryptotext.substring( 5 );
+		
+		// Output in chunks of 5 characters separated by space; if not enough left, the rest will be printed.
+		while ( outputText.length() >= 5 ){
+			System.out.print( outputText.substring( 0, 5 ) + " ");
+			outputText = outputText.substring( 5 );
 		}
-		System.out.println( cryptotext );
+		System.out.println( outputText );
 	}
 
     
