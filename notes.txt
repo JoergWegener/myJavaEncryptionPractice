@@ -22,3 +22,15 @@ Todos:
 + Alle Texte auf Englisch!
 + Kommandozeilenversion testen.
 + Prüfungen auf Parameter in Kommandozeilenoption einbauen.
+
+
+
+Nächster GROSSER Schritt
+------------------------
+
+Ich ersetze die Char-Matrix durch einen String und kalkuliere die
+Koordinaten bei Bedarf mit dem Konstruktor der Punkt-Klasse. Das spart
+insbesondere beim Konstruktor der Matrix massiv an Aufwand und sollte
+auch recht schön nach C++ portierbar sein.
+
+DONE, läuft. Das Coding ist jetzt extrem elegant.

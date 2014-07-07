@@ -8,7 +8,11 @@ public class EncryptionMatrix {
 	// The encryption matrix is a 6x6 matrix. It contains all characters
 	// and the numbers 0..9. SPACE is not needed, because it will always
 	// be ignored. 
-	private char [][] encryptionMatrix = new char [ MATRIXDIM ][ MATRIXDIM ];
+	// Note that this is the MENTAL representation of the algorithm! The technical
+	// one is one where there is one linear string, and the X and Y coordinates are
+	// calculated from the one-dimensional position when needed on the basis of the
+	// position and the matrix dimension.
+	private String encryptionString = null;
 	
 	// Constructor
 	public EncryptionMatrix( String passphrase ) {
@@ -16,33 +20,24 @@ public class EncryptionMatrix {
 		String charsForMatrixInsertion = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"; // these still need to be inserted into the matrix
 		
 		// Write the passphrase into the beginning of the matrix
-	    for ( int count = 0; count < passphrase.length(); count++ ) {
-	    	// Determine the coordinates for the character in the 
-	    	// matrix: X is "count MOD 6" (width of the matrix),
-	    	// Y is "count DIV 6" (depth of the matrix).
-	    	MatrixPoint myPoint = new MatrixPoint( count, MATRIXDIM );
-	    	
-	    	// Now we know the square, and we fill it
-	    	this.encryptionMatrix[ myPoint.getX() ][ myPoint.getY() ] = passphrase.charAt( count );
-	    	
-	    	// The character is already used, so we remove it from the string that
-	    	// contains the still-to-be-inserted characters:
-	    	for ( int i = 0; i < charsForMatrixInsertion.length(); i++ ) {
-	    		if ( charsForMatrixInsertion.charAt( i ) == passphrase.charAt( count ) ) {
-	    			charsForMatrixInsertion = charsForMatrixInsertion.substring( 0,  i ) + charsForMatrixInsertion.substring( i+1 );
-	    			break; // There is only ever one hit, so we can leave the loop here
-	    		}
-	    	}
-	    }
-	    
-	    // Now we add all the characters and numbers that were NOT part of 
-	    // the passphrase
-	    int count = passphrase.length(); // That number of characters has already been inserted above
-	    for ( char c : charsForMatrixInsertion.toCharArray() ) {
-	    	MatrixPoint myPoint = new MatrixPoint( count, MATRIXDIM );
-	    	this.encryptionMatrix[ myPoint.getX() ][ myPoint.getY() ] = c;
-	    	count++;
-	    }
+		this.encryptionString = passphrase;
+		
+		// Delete the characters from the passphrase from the string of 
+		// characters yet to be added (they have already been added, at the start).
+		for ( char c : passphrase.toCharArray() ) {
+			charsForMatrixInsertion = charsForMatrixInsertion.replaceAll( String.valueOf( c ), "" );
+		}
+		
+		// Now add the rest of the characters NOT contained in the passphrase to the
+		// encryption string.
+		this.encryptionString += charsForMatrixInsertion;
+		
+	}
+	
+	
+	// Method that reads a char from a MatrixPoint. Useful for encryption.
+	private char getChar ( MatrixPoint point ) {
+		return encryptionString.charAt( point.getY() * MATRIXDIM + point.getX() );
 	}
 
 	
@@ -73,7 +68,8 @@ public class EncryptionMatrix {
 			char c;
 			c = inputText.charAt( inputText.length() - 1 );
 			MatrixPoint point = this.findPosition( c );
-			outputText += this.encryptionMatrix[ point.getX() ][ ( point.getY() + direction.dirInd + MATRIXDIM ) % MATRIXDIM ];
+			MatrixPoint newPoint = new MatrixPoint( point.getX(), ( point.getY() + direction.dirInd + MATRIXDIM ) % MATRIXDIM );
+			outputText += String.valueOf( getChar( newPoint ) );
 		}
 		
     	return outputText;
@@ -84,28 +80,27 @@ public class EncryptionMatrix {
 	// This result has to be added to the encrypted / decrypted string.
 	private String createTargetCharPair ( MatrixPoint point1, MatrixPoint point2, CryptoDirection direction ) {	
 		String result = "";
-		
 		// Determine the relative position of the 2 characters
 		if ( ( point1.getX() != point2.getX() ) && ( point1.getY() != point2.getY() ) ) {
 			// Both axes are different. Swap horizontally
-			result += this.encryptionMatrix[ point2.getX() ][ point1.getY() ]; // Move c1 horizontally
-			result += this.encryptionMatrix[ point1.getX() ][ point2.getY() ]; // Move c2 horizontally
+			result += String.valueOf( this.getChar( new MatrixPoint( point2.getX(), point1.getY() ) ) ); // move c1 horizontally
+            result += String.valueOf( this.getChar( new MatrixPoint( point1.getX(), point2.getY() ) ) ); // move c2 horizontally
 		} else if ( ( point1.getX() == point2.getX() ) && ( point1.getY() != point2.getY() ) ) { 
 			// On the same X axis. Move both chars down / up one space; roll over if needed
-			result += this.encryptionMatrix[ point1.getX() ][ ( point1.getY() + direction.dirInd + MATRIXDIM ) % MATRIXDIM ];
-			result += this.encryptionMatrix[ point2.getX() ][ ( point2.getY() + direction.dirInd + MATRIXDIM ) % MATRIXDIM ];
+			result += String.valueOf( this.getChar( new MatrixPoint( point1.getX(), ( point1.getY() + direction.dirInd + MATRIXDIM ) % MATRIXDIM ) ) );
+			result += String.valueOf( this.getChar( new MatrixPoint( point2.getX(), ( point2.getY() + direction.dirInd + MATRIXDIM ) % MATRIXDIM ) ) );
 		} else if ( ( point1.getX() != point2.getX() ) && ( point1.getY() == point2.getY() ) ) {
 			// On the same Y axis. Move right / left one space; roll over if needed
-			result += this.encryptionMatrix[ ( point1.getX() + direction.dirInd + MATRIXDIM) % MATRIXDIM ][ point1.getY() ];
-			result += this.encryptionMatrix[ ( point2.getX() + direction.dirInd + MATRIXDIM) % MATRIXDIM ][ point2.getY() ];
+			result += String.valueOf( this.getChar( new MatrixPoint( ( point1.getX() + direction.dirInd + MATRIXDIM ) % MATRIXDIM, point1.getY() ) ) );
+			result += String.valueOf( this.getChar( new MatrixPoint( ( point2.getX() + direction.dirInd + MATRIXDIM ) % MATRIXDIM, point2.getY() ) ) );
 		} else if ( ( point1.getX() == point2.getX() ) && ( point1.getY() == point2.getY() ) ) {
 			// Identical characters: move both one space down / up, roll over if needed
-			result += this.encryptionMatrix[ point1.getX() ][ ( point1.getY() + direction.dirInd + MATRIXDIM) % MATRIXDIM ];
-			result += this.encryptionMatrix[ point2.getX() ][ ( point2.getY() + direction.dirInd + MATRIXDIM) % MATRIXDIM ];
+			result += String.valueOf( this.getChar( new MatrixPoint( point1.getX(), ( point1.getY() + direction.dirInd + MATRIXDIM) % MATRIXDIM ) ) );
+			result += String.valueOf( this.getChar( new MatrixPoint( point2.getX(), ( point2.getY() + direction.dirInd + MATRIXDIM) % MATRIXDIM ) ) );
 		} else {
 			// SHIT this is not supposed to happen!
 			System.out.println( "Clusterfuck; this coding should be completely unreachable!\n" );
-		}
+		}		
 		return result;
 	}
 	
@@ -113,25 +108,15 @@ public class EncryptionMatrix {
 	
 	// Helper method determines the MatrixPoint of a char.
 	private MatrixPoint findPosition ( char c ) {
-		MatrixPoint result = null;
-		mainloop: 
-		for ( int y = 0; y < MATRIXDIM; y++ )
-			for ( int x = 0; x < MATRIXDIM; x++ )
-				if ( this.encryptionMatrix[x][y] == c ) {
-					result = new MatrixPoint( x, y );
-					break mainloop; // Only one hit possible, so we can leave the loop
-				}
-		return result;
+		int position = encryptionString.indexOf( String.valueOf( c ) );
+		return new MatrixPoint( position, MATRIXDIM );
 	}
     
 	// For testing purposes only!
 	public void printMatrix () {
-    	for ( int y = 0; y < MATRIXDIM; y++ ) {
-    		for ( int x = 0; x < MATRIXDIM; x++ ) {
-    			System.out.print( this.encryptionMatrix[x][y] );
-    		}
-    		System.out.print("\n");
-    	}
+		for ( int y = 0; y < MATRIXDIM; y++ ) {
+			System.out.println( encryptionString.substring( y * MATRIXDIM, y * MATRIXDIM + MATRIXDIM - 1) + "\n" );
+		}
 		return;
     }
 
