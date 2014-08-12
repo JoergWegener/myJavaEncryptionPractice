@@ -194,19 +194,27 @@ public class EncryptionMain {
 	// Output. Note that this could be changed to provide the output in a GUI.
 	private static void printResultText( String outputText, CryptoDirection direction ) {
 		System.out.println( "Result Text:" );
+		System.out.println( getResultText( outputText, direction) );
+	}
+	
+	// Get the result text.
+	private static String getResultText( String outputText, CryptoDirection direction ) {
+		
+		String result = "";
 		
 		// Output in chunks of 5 characters separated by space; if not enough left, the rest will be printed.
 		// We only print the stuff in chunks of 5 if we print encrypted text.
 		// Clear text is displayed in one long string.
 		if ( direction == CryptoDirection.DECRYPT ) {
-			System.out.println( outputText );
+			result = outputText;
 		} else {
 			while ( outputText.length() >= 5 ){
-				System.out.print( outputText.substring( 0, 5 ) + " ");
+				result += outputText.substring( 0, 5 ) + " ";
 				outputText = outputText.substring( 5 );
 			}
-			System.out.println( outputText );
+			result += outputText ;
 		}
+		return result;
 	}
 
     
