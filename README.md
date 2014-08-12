@@ -12,6 +12,6 @@ Java, JavaScript) and processes.
 Therefore I created a few tiny repositories, including this one, to hone my skills and get up to speed to the
 nitty-gritty details of aforementioned tools such as Eclipse and git.
 
-Don't take these encryption projects serious.
+Don't take these encryption projects seriously.
 
 Thanks and kind regards, Joerg
