@@ -39,7 +39,8 @@ public class AllTests {
 	
 	// Test the decryption functionality
 	// TODO: the output string is multi-line and contains much more than
-	// what is checked here. Fix this!	@Test
+	// what is checked here. Fix this!	
+	@Test
 	public void testDecrypt() {
 		String[] args = new String[] { "vase", "D", "USG0U SG0" };
 		EncryptionMain.main(args);
