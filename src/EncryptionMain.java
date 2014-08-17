@@ -48,7 +48,7 @@ public class EncryptionMain {
 	
 	// Read a string from the console. NOTE: This could be
 	// changed in a later version to allow a GUI input.
-	private static String getPassphrase (String commandlineText) {
+	private static String getPassphrase (final String commandlineText) {
 		
 		boolean isStringOk = false;
 		String s = "";
@@ -83,7 +83,7 @@ public class EncryptionMain {
 	
 	// Read the direction. Convert to the proper data type
 	// "Direction" means whether to encrypt or decrypt.
-	private static CryptoDirection getDirection(String commandlineText) {
+	private static CryptoDirection getDirection(final String commandlineText) {
 			
 		String s = "";
 		char c; // first character of the string
@@ -118,7 +118,7 @@ public class EncryptionMain {
 	
 	// Read input text; check that only characters, space, and numbers are used.
 	// Repeat until input is correct.
-	private static String getInputtext (String commandlineText) {
+	private static String getInputtext (final String commandlineText) {
 		
 		boolean isStringOk = false;
 		String s = "";
@@ -163,7 +163,7 @@ public class EncryptionMain {
 	
 	// Check the passphrase. The only rule in our algorithm is
 	// that no character may appear more than once.
-	private static boolean checkPassphrase (String passphrase) {
+	private static boolean checkPassphrase (final String passphrase) {
 		
 		for (int i = 0; i < passphrase.length()-1; i++) {
 			for (int j = i+1; j < passphrase.length(); j++) {
@@ -179,7 +179,7 @@ public class EncryptionMain {
 	
 	
 	// Encryption functionality
-	private static String convertString (String passphrase, String inputText, CryptoDirection direction) {
+	private static String convertString (final String passphrase, final String inputText, final CryptoDirection direction) {
         if (direction == CryptoDirection.ENCRYPT)
         	System.out.println("Text to be encrypted:\n" + inputText + "\n");
         else
@@ -192,27 +192,28 @@ public class EncryptionMain {
 	
 	
 	// Output. Note that this could be changed to provide the output in a GUI.
-	private static void printResultText (String outputText, CryptoDirection direction) {
+	private static void printResultText (final String outputText, final CryptoDirection direction) {
 		System.out.println("Result Text:");
 		System.out.println(getResultText(outputText, direction));
 	}
 	
 	// Get the result text.
-	private static String getResultText (String outputText, CryptoDirection direction) {
+	private static String getResultText (final String outputText, final CryptoDirection direction) {
 		
+		String temp = outputText; // DON'T change the import parameter!
 		String result = "";
 		
 		// Output in chunks of 5 characters separated by space; if not enough left, the rest will be printed.
 		// We only print the stuff in chunks of 5 if we print encrypted text.
 		// Clear text is displayed in one long string.
 		if (direction == CryptoDirection.DECRYPT) {
-			result = outputText;
+			result = temp;
 		} else {
-			while (outputText.length() >= 5) {
-				result += outputText.substring(0, 5) + " ";
-				outputText = outputText.substring(5);
+			while (temp.length() >= 5) {
+				result += temp.substring(0, 5) + " ";
+				temp = temp.substring(5);
 			}
-			result += outputText ;
+			result += temp ;
 		}
 		return result;
 	}
@@ -220,7 +221,7 @@ public class EncryptionMain {
     
 	// Only characters, numbers and space allowed in passphrases and cleartexts.
 	// Check this and provide a hint to the user if violated.
-	private static boolean checkStringContent (String str) {
+	private static boolean checkStringContent (final String str) {
         if (str == null) {
         	System.out.println("Please enter at least one character or number!\n");
             return false;
@@ -238,7 +239,7 @@ public class EncryptionMain {
 	// If called from the command line the first three arguments must be passphrase, direction and
 	// inputtext. If all is fine, we use this one.
 	// Return TRUE if successful, so we can decrypt and print the result.
-	private static boolean processArgs (String[] args) {
+	private static boolean processArgs (final String[] args) {
 		if (args.length != 3) {
 			// Wrong call
 			printCommandLineUserhelp();
