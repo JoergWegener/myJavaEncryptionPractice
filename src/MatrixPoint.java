@@ -14,7 +14,7 @@ public final class MatrixPoint {
 	
 	
 	// Possibly the most trivial constructor in IT history.
-	public MatrixPoint( int x, int y ) {
+	public MatrixPoint (int x, int y) {
 		this.x = x;
 		this.y = y;
 	}
@@ -22,19 +22,19 @@ public final class MatrixPoint {
 	
 	// We can also calculate a MatrixPoint from a counter (running number) 
 	// and the matrix dimensions
-	public MatrixPoint( int count, short matrixDimension ) {
+	public MatrixPoint (int count, short matrixDimension) {
 		this.x = count % matrixDimension;
 		this.y = count / matrixDimension;
 	}
 	
 	
 	// Embarrassing, the primitive coding, but hey...
-	public int getX() {
+	public int getX () {
 		return this.x;
 	}
 	
 	
-	public int getY() {
+	public int getY () {
 		return this.y;
 	}
 
