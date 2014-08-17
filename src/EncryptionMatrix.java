@@ -15,7 +15,7 @@ public class EncryptionMatrix {
 	private String encryptionString = null;
 	
 	// Constructor
-	public EncryptionMatrix (String passphrase) {
+	public EncryptionMatrix (final String passphrase) {
 		
 		String charsForMatrixInsertion = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"; // these still need to be inserted into the matrix
 		
@@ -36,13 +36,13 @@ public class EncryptionMatrix {
 	
 	
 	// Method that reads a char from a MatrixPoint. Useful for encryption.
-	private char getChar (MatrixPoint point) {
+	private char getChar (final MatrixPoint point) {
 		return encryptionString.charAt(point.getY() * MATRIXDIM + point.getX());
 	}
 
 	
     // This is the main method. Needs proper documentation.
-	public String convertText (String inputText, CryptoDirection direction) {
+	public String convertText (final String inputText, final CryptoDirection direction) {
 		
 		String outputText = ""; // This is the result
 		
@@ -78,7 +78,7 @@ public class EncryptionMatrix {
 	
 	// Helper method that returns a string of 2 chars for the clear chars provided.
 	// This result has to be added to the encrypted / decrypted string.
-	private String createTargetCharPair (MatrixPoint point1, MatrixPoint point2, CryptoDirection direction) {	
+	private String createTargetCharPair (final MatrixPoint point1, final MatrixPoint point2, final CryptoDirection direction) {	
 		String result = "";
 		// Determine the relative position of the 2 characters
 		if ((point1.getX() != point2.getX()) && (point1.getY() != point2.getY())) {
@@ -107,7 +107,7 @@ public class EncryptionMatrix {
 	
 	
 	// Helper method determines the MatrixPoint of a char.
-	private MatrixPoint findPosition (char c) {
+	private MatrixPoint findPosition (final char c) {
 		int position = encryptionString.indexOf( String.valueOf(c));
 		return new MatrixPoint(position, MATRIXDIM);
 	}
